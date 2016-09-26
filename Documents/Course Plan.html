@@ -1,0 +1,139 @@
+
+<!-- saved from url=(0043)http://www.eecs.wsu.edu/~cs460/planf16.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>460 Class Notes</title>
+</head><body bgcolor="#00cccc" text="#000000">
+
+<h1>460 Course Plan</h1>
+
+<pre>
+                CPTS 460 COURSE PLAN
+                     Fall, 2016
+
+TITLE          : Operating Systems and Computer Architecture
+
+TEXT (REQUIRED): Design and Implementation of the MTX Operating System,
+                 K.C. Wang, Springer International AG, 2015
+
+ASSIGNMENTS:     This website and samples/ directory.
+
+INSTRUCTOR     : K. C. Wang, Professor of EECS, Sloan 321; 
+                 kwang@eecs.wsu.edu
+                 Office Hours: MW 3-4 PM
+TA             : TO BE ANNOUNCED
+
+
+                    TOPICS COVERED:
+
+1. Introduction to Operating Systems:
+    Unix/Linux, MTX. computer system and operations, system development 
+    software, PC emulators, link C and assembly programs.
+
+2. Booting: Develop booters for Linux and MTX.
+     
+3. Processes:
+    Concept and implementation of processes; process states,
+    context switching, process scheduling.  
+
+4. Process management in Unix: 
+      fork, wait, exit, exec, signals, pipes. 
+   Processes in Minix:
+      Tasks, servers and user processes in Minix; 
+
+5. Process Synchronization:  
+    The process model; mutual exclusion and critical regions, 
+    Implementation of low-level mutual exclusion primitives.
+    Synchronization primitives; events, event queues, semaphores.
+
+6. Process Communication:    
+    High-level process synchronization constructs; messages.
+
+7. Process Control:      
+    Scheduling algorithms. Dead lock and starvation problems.
+
+8. Memory Management:
+    Memory management schemes  
+    Virtual memory and demand-paging
+
+9. I/O drivers:         
+    Serial and parallel ports, interrupt handlers.
+    Interraction between interrupt handler and process.
+    Design and implementation of I/O drivers;
+    I/O routines approach, I/O task approach. 
+    I/O tasks in Minix;
+
+10. File Systems: 
+    Review of EXT2 file system.
+    NFS and RFS based on UDP and TCP/IP
+
+
+                   ASSIGNMENTS and REQUIREMENTS 
+
+1.  2 Exams:                  50%
+
+2.  Programming assignments : 50%
+-------------------------------------------------------------
+
+**************************************************************
+*                                                            *
+*                  Grading POLICY :                          *
+*                                                            *
+**************************************************************
+
+1. All Assignments are INDEPENDENT WORK !!  Absosulely no COPYING!!
+
+2. Oral Quizz will be given during demo of your work.
+
+
+
+                   SYSTEM SOFTWARE:
+
+1. Website: http://www.eecs.wsu.edu/~cs460/samples Directory:
+            Sample Lab Assignments Solutions
+
+2. Computers:
+   Your laptops running Linux or equivalent.
+
+===================== DO THESE in week 1 ===============================
+3. Development Software:
+
+   www.eecs.wsu.edu/~cs460/samples/ contains 
+ 
+       Dev86bin.tar.gz : 16-bit BCC development package
+
+   Download to your Linux / directory.
+
+   Run      zcat FILENAME.tar.gz | tar xvf -     
+  
+   to install BCC. Read man pages of bcc, as86 and ld86 to see how to use them.
+   
+4. Get QEMU:  Ubuntu:  apt-get install qemu-system-i386
+
+
+5. ============= DEMO OS MTX of KCW ===============================
+   MTX is a Unix-like OS designed and written entirely by KCW. 
+   It can run on either REAL PCs or Virtual Machines. Get runnable MTX images at
+
+      http://www.eecs.wsu.edu/~cs460/samples/vdisk     # HARD   disk image
+      http://www.eecs.wsu.edu/~cs460/samples/mtximage  # FLOPPY disk image
+
+(1). Run QEMU on vdisk:
+
+         qemu -hda vdisk -smp 8 -m 512m -serial mon:stdio
+
+     Then boot up MTX from partitions 
+
+          1 (rmtx): MTX in 16-bit real mode
+          2 (pmtx): MTX in 32-bit protected mode
+          3 (smp) : SMP MTX in 32-bit protected mode
+          4 (mtx32.1): MTX in 32-bit mode using segmentation
+
+(2). When MTX starts, login as root
+          login: root
+          password: 12345
+
+(3). Enter commands for sh to execute, just like in Unix/Linux
+
+(4). Run QEMU on FD image:
+         qemu -fda mtximage -no-fd-boochk -serial mon:stdio
+========================================================================
+</pre></body></html>

@@ -1,0 +1,34 @@
+VFD=mtximage
+
+echo --------------------- make kernel -----------------------
+
+echo Assembling ts.s 
+as86 -o ts.o ts.s
+
+echo Compiling t.c
+bcc  -c -ansi t.c
+
+echo Linking mtxlib, main, and ts into mtx
+ld86 -d -o mtx ts.o t.o mtxlib /usr/lib/bcc/libc.a
+
+echo Mounting $VFD on /mnt
+mount -o loop $VFD /mnt
+
+echo Copying mtx into /mnt/boot/
+cp mtx /mnt/boot/
+
+echo Unmounting /mnt
+umount /mnt
+
+echo Removing object files in mtx
+rm *.o mtx
+
+echo --------------------- done kernel -----------------------
+
+echo Calling mku in USER
+(cd USER; mku u1)
+
+echo ready to go?
+read dummy
+
+qemu-system-i386 -fda $VFD -no-fd-bootchk

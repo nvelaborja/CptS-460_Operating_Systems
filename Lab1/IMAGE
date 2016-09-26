@@ -1,0 +1,17 @@
+typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned long  u32;
+
+#define  GREEN  10         // color byte for putc()
+#define  CYAN   11
+#define  RED    12
+#define  MAG    13
+#define  YELLOW 14
+
+struct partition {         // Partition table entry in MBR
+       u8  drive;          // 0x80 - active 
+       u8  head;	   // starting head 
+       u8  sector;	   // starting sector 
+       u8  cylinder;       // starting cylinder 
+       u8  type;	   // partition type 
+       u8  end_head;       

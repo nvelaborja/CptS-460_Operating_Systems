@@ -1,0 +1,5 @@
+#usage: mk filename
+as86 -o bs.o bs.s 	#bs.s file does not change
+bcc  -c -ansi $1.c
+ld86 -d -o $1 bs.o $1.o /usr/lib/bcc/libc.a
+dd if=$1 of=FDimage bs=512 count=1 conv=notrunc
