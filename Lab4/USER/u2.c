@@ -1,7 +1,7 @@
 #include "ucode.c"
 int color;
 
-main()
+main(int argc, char *argv[])
 { 
   char name[64], c = '\0'; int pid, cmd;
 

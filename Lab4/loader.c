@@ -99,21 +99,9 @@ int load(char* filename, int segment)
     DIR *dp;
     HEADER *h;
 
-    // Split filename
-    name[0] = strtok(filename, '/'); 
-    i = 1;
-    while ((name[i] = strtok(0, '/')) != 0) i++;
-    // Count tokens
-    i = 0;
-    while (name[i] != 0)
+    if (!tokenize(filename, name, &nnames))
     {
-        nnames++; 
-        i++;
-    }
-
-    if (nnames < 1)
-    {
-        printf("load: Invalid file name %s", filename);
+        printf("load: Invlaid file name %s", filename);
         return -1;
     }
 
@@ -184,4 +172,34 @@ int load(char* filename, int segment)
     setes(0x1000);  // go back to kernel mode
     printf("done\n");
     return 1;
+}
+
+/// Tokenize path and put tokens into argv, and token count in argc
+int tokenize(char *path, char *argv[], int *argc)
+{
+  int i, nnames = 0;
+  char *cp;
+  cp = path;
+  
+  while (*cp != 0)
+  {
+    while (*cp == '/') 
+      *cp++ = 0; 
+
+    if (*cp != 0)
+      argv[nnames++] = cp; 
+
+    while (*cp != '/' && *cp != 0) 
+      cp++;          
+
+    if (*cp != 0)   
+      *cp = 0;                   
+    else 
+      break; 
+
+    cp++;
+  }
+
+  if(nnames) return 1;
+  return 0;
 }

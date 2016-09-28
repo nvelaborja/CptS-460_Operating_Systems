@@ -13,11 +13,10 @@ char *pname[]={"Sun", "Mercury", "Venus", "Earth",  "Mars", "Jupiter",
   bio.o, queue.o loader.o are in mtxlib
 **************************************************/
 #include "queue.c"
-#include "loader.c"
 #include "wait.c"             // YOUR wait.c   file
 #include "kernel.c"           // YOUR kernel.c file
 #include "int.c"              // YOUR int.c    file
-
+#include "loader.c"
 
 
 int init()

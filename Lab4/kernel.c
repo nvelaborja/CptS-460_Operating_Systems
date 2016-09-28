@@ -70,28 +70,11 @@ int geti()
   return atoi(s);
 }
 
-/*
-PROC *kfork(char *filename)
-{
-	(1). creat a child PROC ready to run from body()in Kmode
-	(2). segment=(child pid + 1)*0x1000; //child Umode segment
-	if (filename){
-		(3). load filename to child segment as its Umode image;
-		(4). set up child's ustack for it to return to Umode to execute
-			 the loaded image;
-	}
-	(5). return child PROC pointer;
-}
-*/
-
-
-PROC *kfork(char *filename) 			// create a child process, begin from body()
+PROC *kfork(char *filename) 				// create a child process, begin from body()
 {
 	PROC *p = get_proc(&freeList);
 	int i, child;
 	u16 segment;
-
-	//printf("P%d Enter kfork \n", running->pid);
 
 	if (!p)
 	{

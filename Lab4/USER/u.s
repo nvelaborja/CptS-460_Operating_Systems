@@ -1,8 +1,8 @@
-        .globl _main,_syscall,_exit,_getcs
+        .globl _main,_main0,_syscall,_exit,_getcs
         .globl _getc, _putc, _color
 
 
-        call _main
+        call _main0
 
 ! if main() ever return, exit(0)
 	push  #0
