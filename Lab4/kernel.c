@@ -8,7 +8,7 @@ int body()
 {
 	char c;
 
-	//printf("P%d Enter body \n", running->pid);
+	///printf("P%d Enter body \n", running->pid);
 
 	while(1)
 	{
@@ -20,7 +20,7 @@ int body()
 			tswitch();
 		}
 		printf("-------------------------------------------------------------\n");
-		printList("freelist ", freeList);		// show freelist
+		printList("freelist ", freeList);			// show freelist
 		printQueue("readyQueue", readyQueue);		// show readyQueue
 		printf("-------------------------------------------------------------\n");
 
@@ -64,7 +64,7 @@ int geti()
 {
   char s[16];
 
-  //printf("P%d Enter geti \n", running->pid);
+  printf("P%d Enter geti \n", running->pid);
 
   gets(s);
   return atoi(s);
@@ -75,6 +75,8 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	PROC *p = get_proc(&freeList);
 	int i, child;
 	u16 segment;
+
+	//printf("P%d Enter kfork with filename '%s'\n", running->pid, filename);
 
 	if (!p)
 	{
@@ -90,7 +92,7 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	for (i=1; i<10; i++)					// Initialize new proc's kstack
 		p->kstack[SSIZE-i] = 0;
 
-	p->kstack[SSIZE-1] = (int)body; 		// resume point=address of goUmode
+	p->kstack[SSIZE-1] = (int)goUmode; 		// resume point=address of goUmode
 	p->ksp = &(p->kstack[SSIZE-9]);			// proc saved stack pointer
 
 	enqueue(&readyQueue, p); 				// enter p in readyqueue by priority
@@ -98,11 +100,11 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 
 	PrintProccess(p);
 
+	segment = IMGSIZE * (p->pid + 1);	// Hard code segment location for now
+
 	// Now create image if filename was specified
 	if (filename)							
 	{
-		segment = IMGSIZE * (p->pid + 1);	// Hard code segment location for now
-		
 		load(filename, segment);			// Load file into segment
 
 		for (i = 1; i < 12; i++)			// Initialize new image
@@ -142,8 +144,6 @@ int do_tswitch()
 int do_kfork()
 { 
 	PROC *p = kfork("/bin/u1");
-
-//printf("P%d Enter do_kforko \n", running->pid);
 
 	if (p == 0)
 	{

@@ -5,7 +5,7 @@ main(int argc, char *argv[])
 { 
   char name[64], c = '\0'; int pid, cmd;
 
-  //printf("Enter main \n");
+  //printf("Entre a main \n");
 
   while(1){
     pid = getpid();

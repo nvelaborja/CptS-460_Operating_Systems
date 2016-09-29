@@ -194,6 +194,8 @@ int fork()
   int pid; u16 segment;
   PROC *p = kfork(0);               // kfork() a new child without loading an image
 
+  //printf("P%d Enter fork \n", running->pid);
+
   if (!p) return -1;                // kfork failed
 
   segment = (p->pid + 1) * IMGSIZE; // New child's segment
@@ -213,30 +215,53 @@ int fork()
 
 int exec(char *fileName)
 {
-  int i, length = 0;
-  char file[64], *cp = file;
+  int i, j, length = 0, offset;
+  char file[64], string[64], *cp = string;
   u16 segment = running->uss;       // Same segment
 
-  // Get filename from U space with a length limit of 64
+  //printf("P%d Enter exec \n", running->pid);
+
+  // Get command from U space with a length limit of 64
   while ((*cp++ = get_byte(running->uss, fileName++)) && length++ < 64);
+
+  // Tokenize on the first space to get filename
+  while (string[i] && string[i] != ' ')
+  {
+    file[i] = string[i];
+    i++;
+  }
+  file[i] = 0;    
+  length = i;  
 
   if (!load(file, segment));        // Load file into segment
     return -1;                      // return -1 to umode on failure
 
+  if (length % 2) length++;         // Must have an even length string
+
+  offset = -length;                
+
+  // Move the rest of the string (if any) to top of ustack in user space
+  for (i = 0; i < length; i++)
+    put_byte(string[i], segment, i + offset);
+
+  put_word(offset, segment, offset - 2);
+
   // Re-initialize process ustack for it return to VA = 0
   for (i = 1; i <= 12; i++)
-    put_word(0, segment, -2 * i);
-  running->usp = -24;
+    put_word(0, segment, (offset -2) -2 * i);
+  running->usp = (offset -2) -24;
 
-  put_word(segment, segment, -2 * 12);  // uDS = segment
-  put_word(segment, segment, -2 * 11);  // uES = segment
-  put_word(segment, segment, -2 * 2);   // uCS = segment, uPC = 0
-  put_word(0x0200, segment, -2 * 1);    // Umode flag
+  put_word(segment, segment, (offset -2) -2 * 12);  // uDS = segment
+  put_word(segment, segment, (offset -2) -2 * 11);  // uES = segment
+  put_word(segment, segment, (offset -2) -2 * 2);   // uCS = segment, uPC = 0
+  put_word(0x0200, segment, (offset -2) -2 * 1);    // Umode flag
 }
 
 int copyImage (u16 pseg, u16 cseg, u16 size)
 {
   u16 i;
+
+  //printf("P%d Enter copyImage \n", running->pid);
 
   for (i = 0; i < size; i++)
     put_word (get_word(pseg, i * 2), cseg, i *2);

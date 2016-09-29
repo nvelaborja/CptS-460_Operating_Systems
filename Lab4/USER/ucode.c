@@ -1,19 +1,11 @@
 // ucode.c file
 
+extern int main(int argc, char *argv[]);
+
 char *cmd[] = { "getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "kgetc", "kputc", "fork", "exec", 0 };
 
 #define LEN 64
 #define NUM_CMD 11
-
-int main0(char *s)
-{
-  char *argv[20]; int argc;
-
-  if (tokenize(s, argv, &argc))
-    main(argc, argv);
-
-  return 0;
-}
 
 int show_menu()
 {
@@ -170,34 +162,4 @@ int exec()
   printf("Input a command to exec: ");
   gets(s);
   return syscall(10, s, 0);
-}
-
-/// Tokenize path and put tokens into argv, and token count in argc
-int tokenize(char *path, char *argv[], int *argc)
-{
-  int i, nnames = 0;
-  char *cp;
-  cp = path;
-  
-  while (*cp != 0)
-  {
-    while (*cp == '/') 
-      *cp++ = 0; 
-
-    if (*cp != 0)
-      argv[nnames++] = cp; 
-
-    while (*cp != '/' && *cp != 0) 
-      cp++;          
-
-    if (*cp != 0)   
-      *cp = 0;                   
-    else 
-      break; 
-
-    cp++;
-  }
-
-  if(nnames) return 1;
-  return 0;
 }

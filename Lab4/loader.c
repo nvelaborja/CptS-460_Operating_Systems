@@ -175,6 +175,7 @@ int load(char* filename, int segment)
 }
 
 /// Tokenize path and put tokens into argv, and token count in argc
+// From book, does NOT work as is
 int tokenize(char *path, char *argv[], int *argc)
 {
   int i, nnames = 0;

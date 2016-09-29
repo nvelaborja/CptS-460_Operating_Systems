@@ -2,7 +2,7 @@
 
 int ksleep(int event) 
 { 
-	//printf("P%d Enter ksleep \n", running->pid);
+	printf("P%d Enter ksleep \n", running->pid);
 	running->event = event;		// record event in PROC.event
 	running->status = SLEEP;	// change status to SLEEP
 	enqueue(&sleepList, running);
@@ -13,7 +13,7 @@ int kwakeup(int event)
 { 
 	int i; PROC *p;
 
-//printf("P%d Enter kwakeup \n", running->pid);
+printf("P%d Enter kwakeup \n", running->pid);
 
 	for (i = 1; i < NPROC; i++)		// skip P0
 	{
@@ -30,7 +30,7 @@ int kwakeup(int event)
 
 int ready(PROC *p) 
 { 
-	//printf("P%d Enter ready \n", running->pid);
+	printf("P%d Enter ready \n", running->pid);
 
 	p->event = 0;
 	p->status=READY; 
@@ -43,7 +43,7 @@ int kexit(int exitValue)
 	PROC *p = 0;
 	int i, wakeupP1 = 0;
 
-	//printf("P%d Enter kexit \n", running->pid);
+	printf("P%d Enter kexit \n", running->pid);
 
 	if (running->pid==1 && nproc>2)				// nproc = number of active PROCs
 	{ 
@@ -84,7 +84,7 @@ int kwait(int *status) 							// wait for ZOMBIE child
 {
 	PROC *p; int i, hasChild = 0;
 
-	//printf("P%d Enter kwait \n", running->pid);
+	printf("P%d Enter kwait \n", running->pid);
 
 	while(1)
 	{
