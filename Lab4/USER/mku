@@ -1,9 +1,5 @@
 VFD=../mtximage
 
-mount -o loop $VFD /mnt
-rm /mnt/bin/*
-umount /mnt
-
 echo --------------------- make $1 -----------------------
 bcc -c -ansi $1.c 
 bcc -c -ansi crt0.c
@@ -16,16 +12,3 @@ umount /mnt
 
 rm *.o $1
 echo --------------------- done $1 -----------------------
-
-echo --------------------- make $2 -----------------------
-bcc -c -ansi $2.c
-bcc -c -ansi crt0.c
-as86 -o u.o u.s
-ld86 -o $2 u.o $2.o crt0.o ../mtxlib /usr/lib/bcc/libc.a
-
-mount -o loop $VFD /mnt
-cp $2 /mnt/bin/$2
-umount /mnt
-
-rm *.o $2
-echo --------------------- done $2 -----------------------

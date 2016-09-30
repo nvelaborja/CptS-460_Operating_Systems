@@ -163,3 +163,21 @@ int exec()
   gets(s);
   return syscall(10, s, 0);
 }
+
+int printArgv(char *argv[])
+{
+  int i = 0;
+
+  printf("\n***** argv[] contents *****\n");
+
+  while (argv[i] && i < 32)
+  {
+    printf("Argv[%d]: %s\n", i, argv[i]);
+    i++;
+  }
+
+  if (i == 0)
+    printf("    argv[] is empty @.@\n");
+
+  printf("***************************\n");
+}

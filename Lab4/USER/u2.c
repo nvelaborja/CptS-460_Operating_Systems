@@ -9,10 +9,11 @@ main(int argc, char *argv[])
 
   while(1){
     pid = getpid();
-    color = 0x0C;
+    color = getpid() % 7 + 1;
        
     printf("----------------------------------------------\n");
     printf("Yo soy proc %d en U modo: segmento de corriente=%x\n\n",getpid(), getcs());
+    printArgv(argv);
     show_menu();
     printf("Comando ? ");
     gets(name); 

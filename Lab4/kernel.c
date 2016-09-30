@@ -47,29 +47,6 @@ int body()
 	}
 }
 
-int atoi(char *s)
-{
-  int v = 0;
-
-//printf("P%d Enter atio \n", running->pid);
-
-  while(*s){
-    v = v*10 + (*s-'0');
-    s++;
-  }
-  return v;
-}
-
-int geti()
-{
-  char s[16];
-
-  printf("P%d Enter geti \n", running->pid);
-
-  gets(s);
-  return atoi(s);
-}
-
 PROC *kfork(char *filename) 				// create a child process, begin from body()
 {
 	PROC *p = get_proc(&freeList);
@@ -106,22 +83,47 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	if (filename)							
 	{
 		load(filename, segment);			// Load file into segment
+	}
 
-		for (i = 1; i < 12; i++)			// Initialize new image
+	for (i = 1; i < 12; i++)			// Initialize new image
 			put_word(0, segment, -2 * i);
 
 		p->usp = -2 * 12;					// usp is relative to uss
 		p->uss = segment;
 
-		put_word(0x0200, segment, -2 * 1);		// flag
+	put_word(0x0200, segment, -2 * 1);		// flag
 		put_word(segment, segment, -2 * 2);		// uCS
 		put_word(segment, segment, -2 * 11);	// uES
 		put_word(segment, segment, -2 * 12);	// uDS
-	}
 
 	printf("kfork: P%d forked P%d at %x\n", running->pid, p->pid, segment);
 
 	return p; 								// return child PROC pointer
+}
+
+#include "forkexec.c"
+
+int atoi(char *s)
+{
+  int v = 0;
+
+//printf("P%d Enter atio \n", running->pid);
+
+  while(*s){
+    v = v*10 + (*s-'0');
+    s++;
+  }
+  return v;
+}
+
+int geti()
+{
+  char s[16];
+
+  printf("P%d Enter geti \n", running->pid);
+
+  gets(s);
+  return atoi(s);
 }
 
 void PrintProccess(PROC *p)

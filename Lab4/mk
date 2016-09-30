@@ -27,7 +27,7 @@ rm *.o mtx
 echo --------------------- done kernel -----------------------
 
 echo Calling mku in USER
-(cd USER; mku u1 u2)
+(cd USER; mkallu)
 
 echo ready to go?
 read dummy

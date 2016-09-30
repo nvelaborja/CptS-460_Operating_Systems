@@ -1,11 +1,10 @@
 int argc;
-char *argv[32];
+char *argv[32], *cp;
 
 int main0(char *s)
 {
   //char *string = "This is a test of the tokenize function";
-  //printf("Enter main0 \n");
-
+  //printf("Enter main0, string=%s \n", s);
   if (tokenize(s, argv, &argc, ' '))
   {
     printArgv();
@@ -19,29 +18,19 @@ int main0(char *s)
 int tokenize(char *path, char *argv[], int *argc, char delimiter)
 {
   int i, nnames = 0;
-  char *cp;
-  cp = path;
 
   //printf("Enter tokenize \n");
   
-  while (*cp != 0)
+  cp = strtok(path, " ");
+
+  while (cp != 0)
   {
-    while (*cp == delimiter) 
-      *cp++ = 0; 
-
-    if (*cp != 0)
-      argv[nnames++] = cp; 
-
-    while (*cp != delimiter && *cp != 0) 
-      cp++;          
-
-    if (*cp != 0)   
-      *cp = 0;                   
-    else 
-      break; 
-
-    cp++;
+    argv[nnames] = cp;
+    nnames++;
+    cp = strtok(0, " ");
   }
+
+  *argc = nnames;
 
   if(nnames) return 1;
   return -1;
@@ -61,6 +50,8 @@ int printArgv()
 
   if (i == 0)
     printf("    argv[] is empty @.@\n");
+
+  printf("       argc = %d         \n", argc);
 
   printf("***************************\n");
 }

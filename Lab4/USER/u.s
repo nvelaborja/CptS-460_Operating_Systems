@@ -1,4 +1,4 @@
-        .globl _main,_main0,_syscall,_exit,_getcs,auto_start
+        .globl _main0,_syscall,_exit,_getcs,auto_start
         .globl _getc, _putc, _color
 
 auto_start:
