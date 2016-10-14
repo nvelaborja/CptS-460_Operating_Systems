@@ -1,19 +1,15 @@
 // ucode.c file
 
-extern int main(int argc, char *argv[]);
-
-char *cmd[] = { "getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "kgetc", "kputc", "fork", "exec", "hop", 0 };
+char *cmd[] = { "getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "kgetc", "kputc", 0 };
 
 #define LEN 64
-#define NUM_CMD 12
+#define NUM_CMD 9
 
 int show_menu()
 {
-   printf("***************** Menu ******************\n");
-   printf("*   ps   chname  kfork  switch   wait   *\n");
-   printf("*  exit  kgetc   kputc   fork    exec   *\n");
-   printf("*                 hop                   *\n");
-   printf("*****************************************\n");
+   printf("**************************** Menu *************************\n");
+   printf("*  ps  chname  kfork  switch     wait  exit  fork   exec  *\n");
+   printf("***********************************************************\n");
 }
 
 int find_cmd(char *name)
@@ -57,12 +53,10 @@ int chname()
 int kfork()
 {   
   int child, pid;
-  char fileName[64];
-  printf("Input a filename for kfork: ");
-  gets(fileName);
-
-  printf("proc %d enter kernel to kfork a child\n", getpid()); 
-  child = syscall(3, fileName, 0);
+  //printf("P Enter kfork \n");
+  pid = getpid();
+  printf("proc %d enter kernel to kfork a child\n", pid); 
+  child = syscall(3, 0, 0);
   printf("proc %d kforked a child %d\n", pid, child);
 }    
 
@@ -92,24 +86,6 @@ int atoi(char *s)
     s++;
   }
   return v;
-}
-
-// Taken from http://stackoverflow.com/questions/10746450/how-to-convert-string-to-hexadecimal
-unsigned int atox(char *s) 
-{
- unsigned int result = 0;
- int c ;
- if ('0' == *s && 'x' == *(s+1)) { s+=2;
-  while (*s) {
-   result = result << 4;
-   if (c=(*s-'0'),(c>=0 && c <=9)) result|=c;
-   else if (c=(*s-'A'),(c>=0 && c <=5)) result|=(c+10);
-   else if (c=(*s-'a'),(c>=0 && c <=5)) result|=(c+10);
-   else break;
-   ++s;
-  }
- }
- return result;
 }
 
 int geti()
@@ -167,48 +143,4 @@ char kgetc()
 int kputc(char c)
 {
   return syscall(8, c, 0);
-}
-
-int fork()
-{
-  return syscall(9, 0, 0);
-}
-
-int exec()
-{
-  char s[64];
-
-  printf("Input a command to exec: ");
-  gets(s);
-  return syscall(10, s, 0);
-}
-
-int hop()
-{
-  char s[64];
-  int i;
-
-  printf("Input a segment to hop to (in hex): ");
-  gets(s);
-  i = atox(s);
-
-  return syscall(11, i, 0);
-}
-
-int printArgv(char *argv[])
-{
-  int i = 0;
-
-  printf("\n***** argv[] contents *****\n");
-
-  while (argv[i] && i < 32)
-  {
-    printf("Argv[%d]: %s\n", i, argv[i]);
-    i++;
-  }
-
-  if (i == 0)
-    printf("    argv[] is empty @.@\n");
-
-  printf("***************************\n");
 }

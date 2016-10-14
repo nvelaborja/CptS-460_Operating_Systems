@@ -102,6 +102,7 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 }
 
 #include "forkexec.c"
+#include "casanova.c"
 
 int atoi(char *s)
 {

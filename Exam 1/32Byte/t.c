@@ -61,7 +61,7 @@ int set_vector(u16 vector, u16 handler)
 {
   // put_word(word, segment, offset)
   put_word(handler, 0, vector<<2);             // KPC points to handler
-  put_word(0x1000,  0,(vector<<2) + 2);        // KCS segment=0x1000
+  put_word(0x1000,  0,(vector<<2) + 2);       // KCS segment=0x1000 for 64KB, 0x0800 for 32KB
 }
 
 main()

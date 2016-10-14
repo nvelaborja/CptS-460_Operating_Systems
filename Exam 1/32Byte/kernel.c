@@ -1,4 +1,5 @@
-/********************** kernel.c file ***********************/
+// kernel.c for EXAM 1 32 BYTE mode
+// Nathan VelaBorja - 11392441
 
 int rflag, body();
 
@@ -8,7 +9,7 @@ int body()
 {
 	char c;
 
-	///printf("P%d Enter body \n", running->pid);
+	printf("P%d Enter body \n", running->pid);
 
 	while(1)
 	{
@@ -51,9 +52,9 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 {
 	PROC *p = get_proc(&freeList);
 	int i, child;
-	u16 segment;
+	u16 segment, high;
 
-	//printf("P%d Enter kfork with filename '%s'\n", running->pid, filename);
+	printf("P%d Enter kfork.\n", running->pid);
 
 	if (!p)
 	{
@@ -77,7 +78,9 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 
 	PrintProccess(p);
 
-	segment = IMGSIZE * (p->pid + 1);	// Hard code segment location for now
+	segment = IMGSIZE * (p->pid + 1) + 0x1000;	// Hard code segment location for now
+	//high = segment + IMGSIZE;					// Record high end of this new segment
+	high = segment + (32 * 1024) + 0x0800;
 
 	// Now create image if filename was specified
 	if (filename)							
@@ -86,15 +89,15 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	}
 
 	for (i = 1; i < 12; i++)			// Initialize new image
-			put_word(0, segment, -2 * i);
+		put_word(0, segment, high - 2 * i);
 
-		p->usp = -2 * 12;					// usp is relative to uss
-		p->uss = segment;
+	p->usp = high - 2 * 12;					// usp is relative to uss
+	p->uss = segment;
 
-	put_word(0x0200, segment, -2 * 1);		// flag
-		put_word(segment, segment, -2 * 2);		// uCS
-		put_word(segment, segment, -2 * 11);	// uES
-		put_word(segment, segment, -2 * 12);	// uDS
+	put_word(0x0200, segment, high - 2 * 1);		// flag
+	put_word(segment, segment, high - 2 * 2);		// uCS
+	put_word(segment, segment, high - 2 * 11);	// uES
+	put_word(segment, segment, high - 2 * 12);	// uDS
 
 	printf("kfork: P%d forked P%d at %x\n", running->pid, p->pid, segment);
 
@@ -139,7 +142,7 @@ void PrintProccess(PROC *p)
 
 int do_tswitch() 
 { 
-	//printf("P%d Enter do_tswitch \n", running->pid);
+	printf("P%d Enter do_tswitch \n", running->pid);
 	tswitch();
 }
 
@@ -162,7 +165,7 @@ int do_exit()
 	int i = 0;
 	char c;
 
-	//printf("P%d Enter do_exit \n", running->pid);
+	printf("P%d Enter do_exit \n", running->pid);
 
 	if (running->pid == 1 && nproc > 2)
 	{
@@ -183,7 +186,7 @@ int do_wait()
   int child, status;
   child = kwait(&status);
 
-//printf("P%d Enter do_wait \n", running->pid);
+printf("P%d Enter do_wait \n", running->pid);
 
   if (child<0){
     printf("P%d wait error : no child.\n", running->pid);
@@ -218,7 +221,7 @@ int reschedule()
 {
 	PROC *p, *tempQ = 0;
 
-	//printf("P%d Enter reschedule \n", running->pid);
+	printf("P%d Enter reschedule \n", running->pid);
 
 	while ( (p=dequeue(&readyQueue)) )
 	{ // reorder readyQueue
@@ -237,7 +240,7 @@ int chpriority(int pid, int pri)
 {
 	PROC *p; int i, ok = 0, reQ = 0;
 
-	//printf("P%d Enter chpriority \n", running->pid);
+	printf("P%d Enter chpriority \n", running->pid);
 	
 	if (pid == running->pid)
 	{
@@ -277,7 +280,7 @@ int do_chpriority()
 {
 	int pid, pri;
 
-//printf("P%d Enter do_chpriority \n", running->pid);
+printf("P%d Enter do_chpriority \n", running->pid);
 
 	printf("input pid " );
 	pid = geti();

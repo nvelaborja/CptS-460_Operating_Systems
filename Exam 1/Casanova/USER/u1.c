@@ -33,6 +33,7 @@ main(int argc, char *argv[])
       case 8 : kputc(c);   break;
       case 9 : fork();     break;
       case 10: exec();     break;
+      case 11: hop();      break;
 
       default: invalid(name); break;
     }

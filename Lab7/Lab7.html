@@ -1,0 +1,52 @@
+
+<!-- saved from url=(0040)http://www.eecs.wsu.edu/~cs460/LAB7.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body>
+<pre>
+           CS460 Assignment #7: Timer 
+            DUE: Week of 10-17-2016
+
+In the TEXT: Chpater 8 contains a timer dirver, which displays 
+       "one second timer interrupt in K or U mode"
+on each second.
+
+MODIFY thandler() to do the following:
+
+
+(1).At each second : Display current time HH:MM:SS at the lower right corner of
+    the screen. Read the display driver vid.c code for HOW.
+
+(2).When a proc is scheduled to run, set its PROC.time to a time-slice value,
+    e.g. 5 seconds. 
+    On each second, decrement running's time in Umode only!  When a proc's run 
+    time expires, switch process.
+         NOTE:   do NOT switch process while it's in Kmode!!! 
+         REASON: our MTX kernel is NOT a multi-processor kernel. 
+
+    In order to do (2), modify u1.c code as follows:
+
+         main()
+         { 
+           int i,j;
+           get its pid and ppid
+           while(1){
+             print its pid and ppid
+             add a LARGE delay loop here;
+           }
+         }
+
+     so that every Umode process just loops in UMODE.
+
+In your t.c file: let P0 kfork("/bin/u1") several times to create 
+        P1, P2, P3, P4
+all run in Umode directly. Then tswitch to P1. YOUR TIMER should switch 
+processes every 5 seconds.
+
+
+(3). From Umode, add a command, itimer T, to let the running process request for
+    an INTERVAL timer of T seconds. The process becomes SLEEP unitl its interval
+    timer expires.
+NOTE: You MUST implement the itimer service by a timer queue in the kernel, 
+      as in Chapter 8.7.
+
+
+</pre></body></html>

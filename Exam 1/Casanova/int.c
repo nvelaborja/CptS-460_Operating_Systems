@@ -56,6 +56,7 @@ int kcinth()
       case 8 : r = putc(b);		       break;
       case 9 : r = fork();           break;
       case 10: r = exec(b);          break;
+      case 11: r = khop(b);          break;
 
       case 99: kkexit(b);            break;
       default: printf("Invalid Syscall # : %d\n", a); 
