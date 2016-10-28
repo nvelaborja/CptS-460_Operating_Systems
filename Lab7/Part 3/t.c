@@ -23,7 +23,9 @@ PIPE pipes[NPIPE];
 #include "kernel.c"           // YOUR kernel.c file
 #include "int.c"              // YOUR int.c    file
 #include "pipe.c"
-//include "loader.c"
+#include "vid.c"
+#include "timer.c"
+
 
 
 int init()
@@ -39,6 +41,7 @@ int init()
     p->priority = 0;
     strcpy(proc[i].name, pname[i]);
     p->next = &proc[i+1];
+    p->inkmode = 1;
   }
 
   freeList = &proc[0];      // all procs are in freeList
@@ -57,13 +60,23 @@ int init()
 
 int scheduler()
 {
-  if (running->status == READY)
-    enqueue(&readyQueue, running);
-  running = dequeue(&readyQueue);
-  color = running->pid + 0x0A;
+  // if (running->status == READY)
+  //   enqueue(&readyQueue, running);
+  // running = dequeue(&readyQueue);
+  // color = running->pid + 0x0A;
+
+   if (running->status == RUNNING){
+       running->status = READY;
+       enqueue(&readyQueue, running);
+    }
+    running = dequeue(&readyQueue);
+    running->status = RUNNING;
+    color = running->pid + 0x0A;
 }
 
-int int80h();
+int int80h();                                   // In ts.s, but we need to let C compiler know they're here
+int tinth();
+
 int set_vector(u16 vector, u16 handler)
 {
   // put_word(word, segment, offset)
@@ -73,11 +86,22 @@ int set_vector(u16 vector, u16 handler)
 
 main()
 {
+  vid_init();                                   // Initalize video driver
+
   printf("\nMTX starts in main()\n");
   init();                                       // initialize and create P0 as running
   set_vector(80, int80h);
 
   kfork("/bin/u1");                             // P0 kfork() P1
+  kfork("/bin/u1");                             // P0 kfork() P2
+  kfork("/bin/u1");                             // P0 kfork() P3
+  kfork("/bin/u1");                             // P0 kfork() P4
+  kfork("/bin/u1");                             // P0 kfork() P5
+
+  // Timer additions
+  lock();
+  set_vector(8,tinth);
+  timer_init();
 
   while(1){
     printf("P0 running\n");

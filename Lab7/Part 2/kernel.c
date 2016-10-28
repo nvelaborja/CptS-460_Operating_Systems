@@ -66,6 +66,7 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	p->priority = 1; 						// priority == 1 for all procs except P0
 	p->ppid = running->pid; 				// parent == running
 	p->parent = running;					// parent == current running proc
+	p->inkmode = 1;
 
 	for (i=1; i<10; i++)					// Initialize new proc's kstack
 		p->kstack[SSIZE-i] = 0;
@@ -76,7 +77,7 @@ PROC *kfork(char *filename) 				// create a child process, begin from body()
 	enqueue(&readyQueue, p); 				// enter p in readyqueue by priority
 	nproc++;
 
-	PrintProccess(p);
+	//PrintProccess(p);
 
 	segment = IMGSIZE * (p->pid + 1);	// Hard code segment location for now
 

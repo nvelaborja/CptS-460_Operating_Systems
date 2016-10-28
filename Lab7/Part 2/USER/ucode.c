@@ -3,11 +3,11 @@
 
 extern int main(int argc, char *argv[]);
 
-char *cmd[] = { "getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "kgetc", "kputc", "fork", "exec", "pipe", "pread", "pwrite", "pclose", "pfd", 0 };
+char *cmd[] = { "getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "kgetc", "kputc", "fork", "exec", "pipe", "pread", "pwrite", "pclose", "pfd", "itimer", 0 };
 int pd[2];      // For pipe usage
 
 #define LEN 64
-#define NUM_CMD 16
+#define NUM_CMD 17
 
 int show_menu()
 {
@@ -15,6 +15,7 @@ int show_menu()
    printf("*   ps     chname       kfork      switch    wait *\n");
    printf("*  exit     kgetc       kputc       fork     exec *\n");
    printf("*  pipe     pread      pwrite      pclose    pfd  *\n");
+   printf("*                      itimer                     *\n");
    printf("***************************************************\n");
 }
 
@@ -143,12 +144,12 @@ int streq(char *string1, char *string2)
   return 1;
 }
 
-char kgetc()
+char getc()
 {
   return syscall(7, 0, 0);
 }
 
-int kputc(char c)
+int putc(char c)
 {
   return syscall(8, c, 0);
 }
@@ -273,4 +274,20 @@ int printArgv(char *argv[])
     printf("    argv[] is empty @.@\n");
 
   printf("***************************\n");
+}
+
+int itimer()
+{
+  char response[8];
+  int time;
+    
+  //printf("P Enter itimer \n");
+
+  printf("How long? : ");
+  gets(response);
+  time = atoi(response);
+
+  printf("\n\nTIME=%d\n\n", time);
+
+  return syscall(16, time, 0);
 }

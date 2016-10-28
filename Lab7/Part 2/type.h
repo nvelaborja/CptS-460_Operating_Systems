@@ -38,6 +38,7 @@ typedef struct proc{
     int             exitCode;
     char            name[NAMELEN];       // String name for PROC
     struct oft      *fd[NFD];
+    int             time;                   // Time before proc switches
     int             kstack[SSIZE];      	// per proc stack area
 }PROC;
 

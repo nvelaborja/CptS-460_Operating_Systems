@@ -29,8 +29,8 @@ main(int argc, char *argv[])
       case 4 : kswitch();  break;
       case 5 : wait();     break;
       case 6 : exit();     break;
-      case 7 : c = kgetc(); break; // Not really sure what to do here, but this will show it works
-      case 8 : kputc(c);   break;
+      case 7 : c = getc(); break; // Not really sure what to do here, but this will show it works
+      case 8 : putc(c);   break;
       case 9 : fork();     break;
       case 10: exec();     break;
       case 11: pipe();    break;
@@ -38,6 +38,7 @@ main(int argc, char *argv[])
       case 13: write_pipe();break;
       case 14: close_pipe();break;
       case 15: pfd();      break;
+      case 16: itimer();    break;
 
       default: invalid(name); break;
     }

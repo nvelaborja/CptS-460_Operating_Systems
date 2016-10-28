@@ -50,7 +50,7 @@ int kcinth()
       case 0 : r = kgetpid();        break;
       case 1 : r = kps();            break;
       case 2 : r = kchname(b);       break;
-      case 3 : r = kkfork(b);        break;
+      case 3 : r = kmode();        break;
       case 4 : r = ktswitch();       break;
       case 5 : r = kkwait(b);        break;
       case 6 : r = kkexit(b);        break;
@@ -62,7 +62,8 @@ int kcinth()
       case 12: r = read_pipe(b,c,d);     break;
       case 13: r = write_pipe(b,c,d);    break;
       case 14: r = close_pipe(b);        break;
-      case 15: pfd();                break;
+      case 15: pfd();                    break;
+      case 16: r = itimer(b);        break;
 
       case 99: kkexit(b);            break;
       default: printf("Invalid Syscall # : %d\n", a); 
@@ -152,25 +153,9 @@ int kchname(char *name)
     return 1;
 }
 
-int kkfork(char *fileName)
+int kmode()
 {
-	PROC *p;
-  char buffer[64];
-  int i = 0;
-
-  while (i < 64)             // Go to user space and get the file name
-  {
-    buffer[i] = get_word(running->uss, fileName + i);
-    i++;
-  }
-
-  buffer[63] = 0;            // Terminate it
-
-	p = kfork(buffer);
-
-	if (!p) return -1;
-
-	return p->pid;
+	return body();
 }
 
 int ktswitch()
