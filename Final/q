@@ -1,0 +1,4 @@
+qemu-system-i386 -hda vdisk -m 520m -smp $1 -serial /dev/pts/15 -serial /dev/pts/17 \
+-parallel /dev/pts/5 -localtime #-boot d
+
+

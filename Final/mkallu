@@ -1,0 +1,8 @@
+sh mku init;
+sh mku login;
+sh mku more;
+sh mku grep;
+sh mku cp;
+sh mku l2u;
+sh mku cat;
+sh mku sh;
